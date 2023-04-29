@@ -2,13 +2,11 @@ package org.example.web;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
-import org.example.domain.dto.RequestDto;
 import org.example.domain.dto.TaskDto;
 import org.example.domain.dto.UserDto;
 import org.example.domain.service.impl.TaskServiceImpl;
 import org.example.domain.service.impl.UserServiceImpl;
 import org.example.domain.utils.JwtUtil;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api")
 @AllArgsConstructor
+@CrossOrigin(value = "*")
 public class Controller {
 
     @Autowired
@@ -42,9 +41,9 @@ public class Controller {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<UserDto> login(@RequestBody RequestDto requestDto){
+    public ResponseEntity<UserDto> login(@RequestBody UserDto userDto){
         return ResponseEntity.status(HttpStatus.OK).
-                body(userService.getByCredentials(requestDto.getUsername(), requestDto.getPassword()));
+                body(userService.getByCredentials(userDto.getUsername(), userDto.getPassword1()));
     }
 
     @PostMapping("/auth/signup")

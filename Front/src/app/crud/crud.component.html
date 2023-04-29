@@ -1,0 +1,35 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th class="h4">Id</th>
+            <th class="h4">Email</th>
+            <th class="h4">Status</th>
+            <th class="h4">Fecha</th>
+            <th class="h4">Nombre</th>
+            <th class="h4">Formato</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let e of tasks; let i = index">
+        <td>
+            <dd>{{e.id}}</dd>
+        </td>
+        <td>
+            <dd>{{e.email}}</dd>
+        </td>
+        <td>
+            <dd>{{e.status}}</dd>
+        </td>
+        <td>
+            <dd>{{e.time}}</dd>
+        </td>
+        <td>
+            <dd>{{e.fileName}}</dd>
+        </td>
+        <td>
+            <dd>{{e.status}}</dd>
+        </td>
+        </tr>
+    </tbody>
+
+</table>

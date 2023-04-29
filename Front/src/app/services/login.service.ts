@@ -29,6 +29,10 @@ export class LogInService {
       return this.nombreCache;
     }
 
+    saveUserInformation(usuario: Usuario) {
+      localStorage.setItem('usuario', JSON.stringify(usuario));
+    }
+
     public logIn(usuario: Usuario) {
       this.nombreCache = usuario.username;
       this.contrasenaCache = usuario.password1;

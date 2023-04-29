@@ -11,7 +11,8 @@ import { Usuario } from '../services/usuario';
 export class HomeComponent implements OnInit {
 
   username: string = '';
-  password: string = '';
+  password1: string = '';
+  password2: string = '';
   errorMessage: string = '';
   email: string = '';
 
@@ -21,9 +22,12 @@ export class HomeComponent implements OnInit {
   }
 
   onLogin() {
-    this.login.logIn(new Usuario(0,this.username, this.email, this.password, '',''))
+    this.login.logIn(new Usuario(0,this.username, this.email, this.password1, '',''))
     .subscribe(res =>{
-      alert(res)
+          const usuario: any = res;
+          // Almacenar la información del usuario en el almacenamiento local
+          this.login.saveUserInformation(usuario);
+          this.route.navigate(['crud']);
     }, error => {
       this.errorMessage = error;
       alert(this.errorMessage)
@@ -31,7 +35,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSingIn() {
-    this.login.singIn(new Usuario(0,this.username, this.email, this.password))
+    this.login.singIn(new Usuario(0,this.username, this.email, this.password1, this.password2,''))
     .subscribe(res =>{
       alert('Registrado!')
       this.route.navigate([''])
