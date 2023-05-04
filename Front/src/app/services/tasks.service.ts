@@ -7,10 +7,10 @@ import { Usuario } from './usuario';
   providedIn: 'root'
 })
 export class TasksService {
-  private byUserUrl = 'http://localhost:8080/api/tasks?email';
-  private byIdUrl = 'http://localhost:8080/api/task';
-  private deleteUrl = 'http://localhost:8080/api/task?id';
-  private addUrl = 'http://localhost:8080/api/upload';
+  private byUserUrl = 'http://34.125.146.78:8080/api/tasks?email';
+  private byIdUrl = 'http://34.125.146.78:8080/api/task';
+  private deleteUrl = 'http://34.125.146.78:8080/api/task?id';
+  private addUrl = 'http://34.125.146.78:8080/api/upload';
 
   constructor(private http: HttpClient) { }
 

@@ -18,14 +18,14 @@ export class LogInService {
     }
 
     public logIn(usuario: Usuario) {
-        return this.http.post('http://localhost:8080/api/auth/login', usuario)
+        return this.http.post('http://34.125.146.78:8080/api/auth/login', usuario)
         .pipe(
             catchError(this.handleErrorLogin)
           );
     }
 
     public singIn(usuario: Usuario)    {
-        return this.http.post('http://localhost:8080/api/auth/signup', usuario)
+        return this.http.post('http://34.125.146.78:8080/api/auth/signup', usuario)
         .pipe(
             catchError(this.handleErrorSingin)
           );
