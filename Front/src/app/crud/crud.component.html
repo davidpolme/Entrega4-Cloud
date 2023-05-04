@@ -27,9 +27,12 @@
             <dd>{{e.fileName}}</dd>
         </td>
         <td>
-            <dd>{{e.status}}</dd>
+            <dd>{{e.format}}</dd>
         </td>
+        <td>
+            <button (click)="onBorrar(e.id)" class="btn-danger">Borrar</button>
+          </td>
         </tr>
-    </tbody>
-
-</table>
+      </tbody>
+    </table>
+    <button (click)="onAgregar()" class="btn-success">Agregar Archivo</button>

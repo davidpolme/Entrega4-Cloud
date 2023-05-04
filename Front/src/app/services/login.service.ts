@@ -13,29 +13,11 @@ export class LogInService {
 
     constructor (private http: HttpClient) {}
 
-    contrasenaCache = ''
-    nombreCache = ''
-    idCache = 0;
-
-    public getCon2(){
-      return this.contrasenaCache;
-    }
-
-    public getId2(){
-      return this.idCache;
-    }
-
-    public getNombre2(){
-      return this.nombreCache;
-    }
-
     saveUserInformation(usuario: Usuario) {
       localStorage.setItem('usuario', JSON.stringify(usuario));
     }
 
     public logIn(usuario: Usuario) {
-      this.nombreCache = usuario.username;
-      this.contrasenaCache = usuario.password1;
         return this.http.post('http://localhost:8080/api/auth/login', usuario)
         .pipe(
             catchError(this.handleErrorLogin)
@@ -53,7 +35,7 @@ export class LogInService {
         if (error.status === 400) {
           return throwError(JSON.stringify(error.error.mensaje));
         }
-        return throwError('Something went wrong');
+        return throwError('Las credenciales no son correctas');
     }
 
     private handleErrorSingin(error: HttpErrorResponse) {

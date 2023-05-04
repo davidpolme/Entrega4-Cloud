@@ -10,4 +10,6 @@ public interface TaskService {
     List<TaskDto> getByUser(String email);
     TaskDto getById(int id);
     void deleteById(int id);
+
+    void save(TaskDto taskDto);
 }

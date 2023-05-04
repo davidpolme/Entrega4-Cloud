@@ -9,6 +9,8 @@ import { Usuario } from './usuario';
 export class TasksService {
   private byUserUrl = 'http://localhost:8080/api/tasks?email';
   private byIdUrl = 'http://localhost:8080/api/task';
+  private deleteUrl = 'http://localhost:8080/api/task?id';
+  private addUrl = 'http://localhost:8080/api/upload';
 
   constructor(private http: HttpClient) { }
 
@@ -28,5 +30,17 @@ export class TasksService {
     });
 
     return this.http.get(`${this.byUserUrl}=${user.email}`, { headers });
+  }
+
+  deleteTask(id: number, user: Usuario){
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Token': user.token
+    });
+    return this.http.delete(`${this.deleteUrl}=${id}`, { headers });
+  }
+
+  addTask(formData: FormData){
+    return this.http.post(this.addUrl, formData);
   }
 }

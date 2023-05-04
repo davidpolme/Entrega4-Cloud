@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.example.domain.dto.TaskDto;
 import org.example.domain.dto.UserDto;
+import org.example.domain.service.impl.EmailService;
 import org.example.domain.service.impl.TaskServiceImpl;
 import org.example.domain.service.impl.UserServiceImpl;
 import org.example.domain.utils.JwtUtil;
@@ -11,8 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +35,9 @@ public class Controller {
 
     @Autowired
     private TaskServiceImpl taskService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/allUsers")
     public ResponseEntity<List<UserDto>> allUsers(){
@@ -85,7 +94,7 @@ public class Controller {
     @DeleteMapping("/task")
     public ResponseEntity deleteById(@RequestParam int id, @RequestHeader String token){
         Map<String, Object> message = new HashMap<>();
-        if (JwtUtil.validateToken(token)) {
+        if (!JwtUtil.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }else {
             try {
@@ -97,6 +106,27 @@ public class Controller {
             message.put("Mensaje", "No se pudo eliminar la tarea");
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity upload(@RequestParam("file") MultipartFile file,
+                                 @RequestParam("format") String format,
+                                 @RequestParam("email") String email) throws IOException {
+        TaskDto taskDto = TaskDto.builder().time(LocalDateTime.now())
+                .fileName(file.getOriginalFilename()).email(email)
+                .status("uploaded").format(format).build();
+
+        String filePath = Paths.get("").toAbsolutePath().toString() + "/" + file.getOriginalFilename();
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            fos.write(file.getBytes());
+        }
+
+        taskService.save(taskDto);
+        emailService.sendEmail("oscar.bosigas@uptc.edu.co", "Archivo " + file.getOriginalFilename() + " subido correctamente");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("Content-Type", "application/octet-stream")
+                .header("Content-Disposition", "attachment; filename=" + file.getOriginalFilename() + "." + format).build();
     }
 
 }

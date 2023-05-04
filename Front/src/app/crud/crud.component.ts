@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TasksService } from '../services/tasks.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../services/usuario';
-import { Tasks } from '../services/task';
+import { Archivos } from '../services/task';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-crud',
@@ -11,11 +12,13 @@ import { Tasks } from '../services/task';
 })
 export class CrudComponent implements OnInit {
 
-  constructor(private service : TasksService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private service : TasksService,
+     private router: Router, private route: ActivatedRoute,
+     private changeDetectorRef: ChangeDetectorRef) { }
 
   task : any;
 
-  tasks: Array<Tasks> = [];
+  tasks: Array<Archivos> = [];
 
   ngOnInit(): void {
     this.getTasksByUser();
@@ -44,5 +47,24 @@ export class CrudComponent implements OnInit {
         this.tasks = data;
       });
     }
+  }
+
+  onBorrar(id: number){
+    const usuarioJson = localStorage.getItem('usuario');
+    if (usuarioJson !== null) {
+      const usuario: Usuario = JSON.parse(usuarioJson);
+    this.service.deleteTask(id, usuario)
+    .pipe(
+      switchMap(async () => this.getTasksByUser())
+    )
+    .subscribe(res =>{
+      this.changeDetectorRef.detectChanges();
+      alert('Tarea eliminada')
+    });
+    }
+  }
+
+  onAgregar(){
+    this.router.navigate(['archivo'])
   }
 }

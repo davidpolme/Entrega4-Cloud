@@ -35,14 +35,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSingIn() {
-    this.login.singIn(new Usuario(0,this.username, this.email, this.password1, this.password2,''))
-    .subscribe(res =>{
-      alert('Registrado!')
-      this.route.navigate([''])
-    }, error => {
-      this.errorMessage = error;
-      alert(this.errorMessage)
-    }); 
+    this.route.navigate(['registro']);
   }
 
 }

@@ -60,5 +60,12 @@ public class TaskServiceImpl implements TaskService {
         repository.deleteById(id);
     }
 
-
+    @Override
+    public void save(TaskDto taskDto) {
+        TaskEntity taskEntity = TaskEntity.builder().email(taskDto.getEmail())
+                .time(taskDto.getTime()).format(taskDto.getFormat())
+                .status(taskDto.getStatus()).fileName(taskDto.getFileName())
+                .build();
+        this.repository.save(taskEntity);
+    }
 }
