@@ -51,8 +51,11 @@ public class Controller {
 
     @PostMapping("/auth/login")
     public ResponseEntity<UserDto> login(@RequestBody UserDto userDto){
-        return ResponseEntity.status(HttpStatus.OK).
-                body(userService.getByCredentials(userDto.getUsername(), userDto.getPassword1()));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).
+                    body(userService.getByCredentials(userDto.getUsername(), userDto.getPassword1()));
+        }catch (NullPointerException e){}
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PostMapping("/auth/signup")

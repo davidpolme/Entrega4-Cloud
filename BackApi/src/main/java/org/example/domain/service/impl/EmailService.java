@@ -14,7 +14,7 @@ public class EmailService {
     public void sendEmail(String email, String mesg){
         String host = "smtp.gmail.com";
         String username = "oscar7bosigas@gmail.com";
-        String password = "";
+        String password = "aynagmserbsbzgyc";
         String subject = "Prueba de correo electrónico";
 
         Properties props = new Properties();
