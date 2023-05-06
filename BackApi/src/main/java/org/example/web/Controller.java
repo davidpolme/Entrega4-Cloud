@@ -123,12 +123,7 @@ public class Controller {
         taskService.uploadObjectFromMemory(file.getOriginalFilename(), file.getBytes());
 
         taskService.save(taskDto);
-<<<<<<< Updated upstream
-      //  emailService.sendEmail("oscar.bosigas@uptc.edu.co", "Archivo " + file.getOriginalFilename() + " subido correctamente");
         return ResponseEntity
-=======
-       return ResponseEntity
->>>>>>> Stashed changes
                 .status(HttpStatus.OK)
                 .header("Content-Type", "application/octet-stream")
                 .header("Content-Disposition", "attachment; filename=" + file.getOriginalFilename() + "." + format).build();
