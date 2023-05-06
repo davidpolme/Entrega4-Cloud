@@ -1,5 +1,6 @@
 package org.example.web;
 
+import com.google.api.Http;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.example.domain.dto.TaskDto;
@@ -119,17 +120,23 @@ public class Controller {
                 .fileName(file.getOriginalFilename()).email(email)
                 .status("uploaded").format(format).build();
 
-        String filePath = Paths.get("").toAbsolutePath().toString() + "/" + file.getOriginalFilename();
-        try (FileOutputStream fos = new FileOutputStream(filePath)) {
-            fos.write(file.getBytes());
-        }
+        taskService.uploadObjectFromMemory(file.getOriginalFilename(), file.getBytes());
 
         taskService.save(taskDto);
+<<<<<<< Updated upstream
       //  emailService.sendEmail("oscar.bosigas@uptc.edu.co", "Archivo " + file.getOriginalFilename() + " subido correctamente");
         return ResponseEntity
+=======
+       return ResponseEntity
+>>>>>>> Stashed changes
                 .status(HttpStatus.OK)
                 .header("Content-Type", "application/octet-stream")
                 .header("Content-Disposition", "attachment; filename=" + file.getOriginalFilename() + "." + format).build();
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<byte[]> download(@RequestParam String file) throws IOException {
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.getFile(file));
     }
 
 }

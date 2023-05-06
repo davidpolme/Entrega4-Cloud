@@ -20,6 +20,8 @@ export class CrudComponent implements OnInit {
 
   tasks: Array<Archivos> = [];
 
+  isUploaded = false;
+
   ngOnInit(): void {
     this.getTasksByUser();
   }
@@ -66,5 +68,13 @@ export class CrudComponent implements OnInit {
 
   onAgregar(){
     this.router.navigate(['archivo'])
+  }
+
+  onDescargar(nombre: string, fromato: string, status: string){
+    const file = nombre +"."+ fromato;
+    if(status != "uploaded"){
+      this.isUploaded = true
+      this.service.downloadFile(nombre);
+    }
   }
 }

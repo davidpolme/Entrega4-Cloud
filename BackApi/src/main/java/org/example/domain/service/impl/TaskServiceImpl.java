@@ -1,15 +1,27 @@
 package org.example.domain.service.impl;
 
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.ReadChannel;
+import com.google.cloud.storage.*;
+import com.google.common.io.ByteStreams;
 import org.example.domain.dto.TaskDto;
 import org.example.domain.service.TaskService;
 import org.example.persistence.entities.TaskEntity;
 import org.example.persistence.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -67,5 +79,52 @@ public class TaskServiceImpl implements TaskService {
                 .status(taskDto.getStatus()).fileName(taskDto.getFileName())
                 .build();
         this.repository.save(taskEntity);
+    }
+
+    public void uploadObjectFromMemory(String objectName, byte[] content) throws IOException {
+        // The ID of your GCP project
+        String projectId = "trusty-anchor-342404";
+
+        // The ID of your GCS bucket
+        String bucketName = "bucket-cloud-oscar";
+
+        Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
+        storage = StorageOptions.newBuilder()
+                .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(".\\trusty-anchor-342404-b3673e24e9ad.json")))
+                .setProjectId(projectId).build()
+                .getService();
+        BlobId blobId = BlobId.of(bucketName, objectName);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+        storage.createFrom(blobInfo, new ByteArrayInputStream(content));
+
+        System.out.println(
+                "Object "
+                        + objectName
+                        + " uploaded to bucket "
+                        + bucketName
+                        + " with contents "
+                        );
+    }
+
+    public byte[] getFile(String fileName) throws IOException {
+        String projectId = "trusty-anchor-342404";
+        String bucketName = "bucket-cloud-oscar";
+        long startByte = 0;
+        long endBytes = 1024;
+        Storage storage = StorageOptions.newBuilder()
+                .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(".\\trusty-anchor-342404-b3673e24e9ad.json")))
+                .setProjectId(projectId).build()
+                .getService();
+        BlobId blobId = BlobId.of(bucketName, fileName);
+        Blob blob = storage.get(blobId);
+       /* String filePath = Paths.get("").toAbsolutePath().toString() + "/"+fileName;
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            fos.write(blob.getContent());
+        }
+            System.out.printf(
+                    "%s",
+                    blobId.toGsUtilUri());
+        */
+        return blob.getContent();
     }
 }

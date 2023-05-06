@@ -32,6 +32,10 @@
         <td>
             <button (click)="onBorrar(e.id)" class="btn-danger">Borrar</button>
           </td>
+        <td>
+            <button [disabled]="isUploaded" (click)="onDescargar(e.fileName , e.format, e.status)">Descargar archivo</button>
+        </td>
+
         </tr>
       </tbody>
     </table>

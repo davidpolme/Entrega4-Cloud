@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario } from './usuario';
+import * as FileSaver from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class TasksService {
   private byIdUrl = 'http://34.125.146.78:8080/api/task';
   private deleteUrl = 'http://34.125.146.78:8080/api/task?id';
   private addUrl = 'http://34.125.146.78:8080/api/upload';
+  private downloadUri = 'http://34.125.146.78:8080/api/download?file'
 
   constructor(private http: HttpClient) { }
 
@@ -42,5 +44,12 @@ export class TasksService {
 
   addTask(formData: FormData){
     return this.http.post(this.addUrl, formData);
+  }
+
+  downloadFile(filename: string) {
+    this.http.get(`${this.downloadUri}=${filename}`, { responseType: 'blob' })
+      .subscribe((data: Blob) => {
+        FileSaver.saveAs(data, filename);
+      });
   }
 }
