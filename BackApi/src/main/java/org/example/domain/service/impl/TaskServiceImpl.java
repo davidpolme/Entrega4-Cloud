@@ -112,7 +112,7 @@ public class TaskServiceImpl implements TaskService {
         long startByte = 0;
         long endBytes = 1024;
         Storage storage = StorageOptions.newBuilder()
-                .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(".\\trusty-anchor-342404-b3673e24e9ad.json")))
+                .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream("trusty-anchor-342404-b3673e24e9ad.json")))
                 .setProjectId(projectId).build()
                 .getService();
         BlobId blobId = BlobId.of(bucketName, fileName);
